@@ -1,3 +1,4 @@
+local method_finder = require("navigate.method_finder")
 local Path = require("plenary.path")
 
 local marks = {}
@@ -20,11 +21,19 @@ M.create_mark = function()
 
     local normalized_bufname = normalize_path(bufname)
 
+    local class_name = method_finder.find_parent_type_name()
+
+    local method_name = method_finder.find_parent_method_name()
+
+    -- Add in the line number to the display text
+    local display_text = string.format("%s.%s", class_name, method_name)
+
     table.insert(marks, {
         CursorRow = cursor_position[1],
         CursorColumn = cursor_position[2],
         BufName = bufname,
-        NormalizedBufName = normalized_bufname,
+        -- NormalizedBufName = normalized_bufname,
+        NormalizedBufName = display_text,
     })
 
     current_mark_index = #marks
